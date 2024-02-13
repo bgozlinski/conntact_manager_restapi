@@ -1,33 +1,55 @@
 # Zadanie domowe #11
-Celem tego zadania domowego jest stworzenie interfejsu REST API do przechowywania i zarządzania kontaktami. API powinno być zbudowane przy użyciu infrastruktury FastAPI i używać SQLAlchemy do zarządzania bazą danych.
+This project is a web-based application designed for managing contacts. It leverages modern Python frameworks and 
+libraries to provide a robust backend system that handles CRUD operations (Create, Read, Update, Delete) for 
+contact entities. Utilizing SQLAlchemy for database operations, Pydantic for data validation, and FastAPI for 
+the web framework, it offers a scalable solution for contact management.
 
-Kontakty powinny być przechowywane w bazie danych i zawierać następujące informacje:
+## Dependencies
+* SQLAlchemy
+* Pydantic
+* FastAPI
 
-1. Imię
-2. Nazwisko
-3. Adres e-mail
-4. Numer telefonu
-5. Datę urodzenia
-6. Dodatkowe dane (opcjonalnie)
+## Features
 
-Interfejs API powinien być w stanie wykonywać następujące czynności:
+* Contact Management: Create, read, update, and delete contacts with fields such as name, email, and phone number.
+* Database Integration: Uses SQLAlchemy for efficient database management and operations.
+* Data Validation: Implements schemas for request and response validation, ensuring data integrity.
 
-1. Utworzyć nowy kontakt
-2. Pobrać listę wszystkich kontaktów
-3. Pobrać jeden kontakt według ID
-4. Zaktualizować istniejący kontakt
-5. Usunąć kontakt
+Clone the project repository:
+```bash
+git clone https://github.com/bgozlinski/django-quotes.git
+cd django-quotes
+```
 
-Oprócz podstawowej funkcjonalności, CRUD API powinien mieć również następujące cechy:
+Install the required packages:
+```bash
+pip install -r requirements.txt
+```
 
-1. Kontakty powinny być przeszukiwalne według imienia, nazwiska lub adresu e-mail (Query).
-2. API powinno być w stanie pobrać listę kontaktów z datami urodzin na najbliższe 7 dni.
+Run docker-compose
+```bash
+sudo docker-compose up -d
+```
 
-## Wymagania ogólne
-1. Użycie frameworka FastAPI do tworzenia API.
-2. Użycie SQLAlchemy ORM do pracy z bazą danych.
-3. Jako bazy danych należy użyć PostgreSQL.
-4. Obsługa operacji CRUD dla kontaktów.
-5. Obsługa przechowywania daty urodzenia kontaktu.
-6. Dostarczenie dokumentów dla API.
-7. Użycie modułu walidacji danych Pydantic.
+## Configuration
+
+### Environment Variables
+
+For security reasons, it's recommended to use environment variables for sensitive information like database credentials:
+For more view visit [.env Template](.env.dist)
+
+## Usage
+
+To start program run main.py file
+
+```bash
+python main.py
+```
+
+Navigate to the URL (e.g., `http://localhost:8000/docs `).
+
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
