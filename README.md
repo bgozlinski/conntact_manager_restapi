@@ -1,4 +1,4 @@
-# Zadanie domowe #11
+# FastAPI and SQLAlchemy project
 This project is a web-based application designed for managing contacts. It leverages modern Python frameworks and 
 libraries to provide a robust backend system that handles CRUD operations (Create, Read, Update, Delete) for 
 contact entities. Utilizing SQLAlchemy for database operations, Pydantic for data validation, and FastAPI for 
