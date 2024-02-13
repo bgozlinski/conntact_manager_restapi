@@ -1,7 +1,8 @@
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from src.database.models import Contact
-from typing import List
-from sqlalchemy import or_
+from typing import List, Type
+from sqlalchemy import or_, func, Date
 
 
 async def get_contacts(skip: int, limit: int, db: Session) -> List[Contact]:
@@ -41,7 +42,7 @@ async def update_contact(contact_id: int, body: Contact, db: Session) -> Contact
 
 
 async def delete_contact(contact_id: int, db: Session) -> Contact | None:
-    contact = db.query(Contact).filter(Contact.id ==contact_id).first()
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
     if contact:
         db.delete(contact)
         db.commit()
@@ -49,7 +50,7 @@ async def delete_contact(contact_id: int, db: Session) -> Contact | None:
     return contact
 
 
-async def search_contact(query: str, db: Session) -> List[Contact]:
+async def search_contact(query: str, db: Session) -> list[Type[Contact]]:
     return db.query(Contact).filter(
         or_(
             Contact.first_name.ilike(f'%{query}%'),
@@ -57,3 +58,16 @@ async def search_contact(query: str, db: Session) -> List[Contact]:
             Contact.email.ilike(f'%{query}%')
         )
     ).all()
+
+
+async def get_contacts_with_upcoming_birthdays(db: Session) -> List[Contact]:
+    today = datetime.now()
+    in_a_week = today + timedelta(days=7)
+
+    upcoming_birthdays = db.query(Contact).filter(
+        func.extract('month', func.cast(Contact.birth_date, Date)) == today.month,
+        func.extract('day', func.cast(Contact.birth_date, Date)) >= today.day,
+        func.extract('day', func.cast(Contact.birth_date, Date)) <= in_a_week.day
+    ).all()
+
+    return upcoming_birthdays
