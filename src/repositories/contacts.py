@@ -57,4 +57,3 @@ async def search_contact(query: str, db: Session) -> List[Contact]:
             Contact.email.ilike(f'%{query}%')
         )
     ).all()
-

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import crud
@@ -13,6 +13,12 @@ router = APIRouter(prefix="/contacts", tags=["contacts"])
 @router.get("/", response_model=List[Contact])
 async def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     contacts = await repository_contacts.get_contacts(skip=skip, limit=limit, db=db)
+    return contacts
+
+
+@router.get("/search", response_model=List[Contact])
+async def search_contacts(query: str, db: Session = Depends(get_db)):
+    contacts = await repository_contacts.search_contact(query=query, db=db)
     return contacts
 
 
@@ -45,8 +51,4 @@ async def delete_contact(contact_id: int, db: Session = Depends(get_db)):
     return contact
 
 
-@router.get("/search", response_model=List[Contact])
-async def search_contacts(query: str, db: Session = Depends(get_db)):
-    contacts = await repository_contacts.search_contact(query=query, db=db)
-    print(contacts)
-    return contacts
+
