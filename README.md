@@ -8,12 +8,14 @@ the web framework, it offers a scalable solution for contact management.
 * SQLAlchemy
 * Pydantic
 * FastAPI
+* JSON Web Token
 
 ## Features
 
 * Contact Management: Create, read, update, and delete contacts with fields such as name, email, and phone number.
 * Database Integration: Uses SQLAlchemy for efficient database management and operations.
 * Data Validation: Implements schemas for request and response validation, ensuring data integrity.
+* Contacts are viewed and managed only by authorized User.
 
 Clone the project repository:
 ```bash
