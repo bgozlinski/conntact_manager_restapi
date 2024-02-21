@@ -1,25 +1,30 @@
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from src.database.models import Contact
+from sqlalchemy.sql.functions import user
+
+from src.database.models import Contact, User
 from typing import List, Type
-from sqlalchemy import or_, func, Date
+from sqlalchemy import or_, func, Date, and_
 
 
-async def get_contacts(skip: int, limit: int, db: Session) -> List[Contact]:
-    return db.query(Contact).offset(skip).limit(limit).all()
+async def get_contacts(skip: int, limit: int, user: User, db: Session) -> List[Contact]:
+    return db.query(Contact).filter(Contact.user_id == user.id).offset(skip).limit(limit).all()
+    # return db.query(Contact).offset(skip).limit(limit).all()
 
 
-async def get_contact(contact_id: int, db: Session) -> Contact:
-    return db.query(Contact).filter(Contact.id == contact_id).first()
+async def get_contact(contact_id: int, user: User,  db: Session) -> Contact:
+    return db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
+    # return db.query(Contact).filter(Contact.id == contact_id).first()
 
 
-async def create_contact(body: Contact, db: Session) -> Contact:
+async def create_contact(body: Contact, user: User, db: Session) -> Contact:
     contact = Contact(first_name=body.first_name,
                       last_name=body.last_name,
                       email=body.email,
                       phone_number=body.phone_number,
                       birth_date=body.birth_date,
-                      additional_info=body.additional_info
+                      additional_info=body.additional_info,
+                      user_id=user.id
                       )
     db.add(contact)
     db.commit()
@@ -27,8 +32,8 @@ async def create_contact(body: Contact, db: Session) -> Contact:
     return contact
 
 
-async def update_contact(contact_id: int, body: Contact, db: Session) -> Contact | None:
-    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+async def update_contact(contact_id: int, body: Contact, user: User, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
     if contact:
         contact.first_name = body.first_name
         contact.last_name = body.last_name
@@ -41,8 +46,8 @@ async def update_contact(contact_id: int, body: Contact, db: Session) -> Contact
     return contact
 
 
-async def delete_contact(contact_id: int, db: Session) -> Contact | None:
-    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+async def delete_contact(contact_id: int, user: User, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
     if contact:
         db.delete(contact)
         db.commit()
