@@ -15,8 +15,8 @@ from fastapi_limiter.depends import RateLimiter
 router = APIRouter(prefix="/contacts", tags=["contacts"])
 
 
-@router.get("/", response_model=List[Contact], description='No more than 3 requests per minute',
-            dependencies=[Depends(RateLimiter(times=3, seconds=60))])
+@router.get("/", response_model=List[Contact], description='No more than 10 requests per minute',
+            dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 async def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db),
                         current_user: User = Depends(auth_service.get_current_user)):
     contacts = await repository_contacts.get_contacts(skip=skip, limit=limit, user=current_user, db=db)
