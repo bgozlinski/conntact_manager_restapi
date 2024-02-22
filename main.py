@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI
 import uvicorn
-from src.routes import contacts, auth
+from src.routes import contacts, auth, users
 from fastapi_limiter import FastAPILimiter
 import redis.asyncio as redis
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,6 +25,7 @@ app.add_middleware(
 
 app.include_router(contacts.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix='/api')
 
 
 @app.on_event("startup")
