@@ -24,6 +24,24 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, username: str, host: str):
+    """
+    Sends an email to a user with a link to verify their email address.
+
+    This function generates a verification token using the user's email, constructs an email message with a template,
+    and sends it to the specified email address. The email includes a link for the user to verify their email address.
+
+    Parameters:
+        email (EmailStr): The email address of the recipient.
+        username (str): The username of the recipient, used in the email body.
+        host (str): The host URL to be included in the verification link.
+
+    Note:
+        The function uses a predefined email template ('email_template.html') located in the 'templates' folder.
+        It handles ConnectionErrors by printing the exception, indicating issues with the SMTP server connection.
+
+    Raises:
+        ConnectionErrors: If there is an issue with the email server connection.
+    """
     try:
         token_verification = auth_service.create_email_token({'sub': email})
         message = MessageSchema(
