@@ -12,7 +12,7 @@ class ContactBase(BaseModel):
         last_name (str): The last name of the contact.
         email (EmailStr): The email address of the contact. Must be a valid email format.
         phone_number (str): The contact's phone number as a string.
-        birth_date (date): The birth date of the contact.
+        birth_date (date): The birthdate of the contact.
         additional_info (Optional[str]): Optional additional information about the contact; defaults to None.
 
     This base model includes essential fields for contact management systems, allowing for extension and customization.
@@ -25,7 +25,7 @@ class ContactBase(BaseModel):
     additional_info: Optional[str] = None
 
 
-class Contact(ContactBase):
+class ContactModel(ContactBase):
     """
     A detailed model for a contact, extending the base contact model with an identifier.
 

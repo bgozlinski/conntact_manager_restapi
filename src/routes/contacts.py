@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from src.database.models import User
-from src.schemas.contacts import Contact
+from src.schemas.contacts import ContactModel
 from src.database.db import get_db
 from src.repositories import contacts as repository_contacts
 from src.services.auth import auth_service
@@ -14,7 +14,7 @@ from fastapi_limiter.depends import RateLimiter
 router = APIRouter(prefix="/contacts", tags=["contacts"])
 
 
-@router.get("/", response_model=List[Contact], description='No more than 10 requests per minute',
+@router.get("/", response_model=List[ContactModel], description='No more than 10 requests per minute',
             dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 async def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db),
                         current_user: User = Depends(auth_service.get_current_user)):
@@ -34,7 +34,7 @@ async def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(g
     return contacts
 
 
-@router.get("/search", response_model=List[Contact])
+@router.get("/search", response_model=List[ContactModel])
 async def search_contacts(query: str, db: Session = Depends(get_db)):
     """
     Searches for contacts based on a query string.
@@ -50,7 +50,7 @@ async def search_contacts(query: str, db: Session = Depends(get_db)):
     return contacts
 
 
-@router.get("/upcoming-birthdays", response_model=List[Contact])
+@router.get("/upcoming-birthdays", response_model=List[ContactModel])
 async def read_contacts_with_upcoming_birthdays(db: Session = Depends(get_db)):
     """
     Retrieves contacts with upcoming birthdays within the next week.
@@ -65,7 +65,7 @@ async def read_contacts_with_upcoming_birthdays(db: Session = Depends(get_db)):
     return contacts
 
 
-@router.get("/{id}", response_model=Contact)
+@router.get("/{id}", response_model=ContactModel)
 async def read_contact(contact_id: int, db: Session = Depends(get_db),
                        current_user: User = Depends(auth_service.get_current_user)):
     """
@@ -88,8 +88,8 @@ async def read_contact(contact_id: int, db: Session = Depends(get_db),
     return contact
 
 
-@router.post("/", response_model=Contact, status_code=status.HTTP_201_CREATED)
-async def create_contact(body: Contact, db: Session = Depends(get_db),
+@router.post("/", response_model=ContactModel, status_code=status.HTTP_201_CREATED)
+async def create_contact(body: ContactModel, db: Session = Depends(get_db),
                          current_user: User = Depends(auth_service.get_current_user)):
     """
     Creates a new contact for the current authenticated user.
@@ -105,8 +105,8 @@ async def create_contact(body: Contact, db: Session = Depends(get_db),
     return await repository_contacts.create_contact(body=body, user=current_user, db=db)
 
 
-@router.put("/{id}", response_model=Contact)
-async def update_contact(body: Contact, db: Session = Depends(get_db),
+@router.put("/{id}", response_model=ContactModel)
+async def update_contact(body: ContactModel, db: Session = Depends(get_db),
                          current_user: User = Depends(auth_service.get_current_user)):
     """
     Updates an existing contact for the current authenticated user.
@@ -128,7 +128,7 @@ async def update_contact(body: Contact, db: Session = Depends(get_db),
     return contact
 
 
-@router.delete("/{id}", response_model=Contact)
+@router.delete("/{id}", response_model=ContactModel)
 async def delete_contact(contact_id: int, db: Session = Depends(get_db),
                          current_user: User = Depends(auth_service.get_current_user)):
     """
